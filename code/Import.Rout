@@ -1,0 +1,681 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> rm(list=ls())
+> library(readstata13)
+> dat<- read.dta13("../data/DEfull_4Jan24withscalars.dta")
+> 
+> table(dat$iso3)
+
+AGO ARM BEN BFA BGD BOL BRA BRB BWA CAF CAN CHN CIV COG CZE ECU EGY ESP ETH FJI 
+  1   2   2   7  11   3  10   1   2   3   1  17   2   4   1   2   5  17   2   2 
+FRA GHA GMB GRC GTM HND HTI IDN IND IRN IRQ ISR ITA JPN KEN KOR LAO LBY MAR MDA 
+  9   4   3   1   7   2   3   1  30  10   1   5  10   1  18  15   2   1   2   2 
+MDG MLI MMR MOZ MUS MWI NGA NIC NOR PAK PER PHL PNG POL PRY RUS THA TJK TUN TUR 
+  3   2   3   9   2   6   2   3   2  10   6   1   1   3   2   8   8   2   1   8 
+TWN TZA UGA UKR URY USA UZB VEN VNM YEM ZAF ZMB ZWE 
+ 19   2   2   2   1   5   2   1  17   1   1   4   3 
+> length(unique(dat$refid))
+[1] 138
+> table(dat$refid)
+
+                                          GPDS 
+                                            66 
+                                 pre2022_158la 
+                                             1 
+                                 pre2022_228la 
+                                             1 
+                                 pre2022_275la 
+                                             1 
+                                 pre2022_283la 
+                                             1 
+                                 pre2022_284la 
+                                             1 
+                                 pre2022_297la 
+                                             1 
+                                 pre2022_309la 
+                                             1 
+                                 pre2022_313la 
+                                             1 
+                                 pre2022_338la 
+                                             1 
+                                 pre2022_359la 
+                                             1 
+                                 pre2022_372la 
+                                             1 
+                                 pre2022_379la 
+                                             3 
+                                 pre2022_397la 
+                                             1 
+      pre2022_600norog2620rota704astro713adeno 
+                                             1 
+pre2022_601norog2628rota669salm677shig683campy 
+                                             1 
+                                   pre2022_9la 
+                                             1 
+                               R2022_00018_new 
+                                             1 
+                               R2022_00253_new 
+                                             1 
+                               R2022_00275_new 
+                                             1 
+                               R2022_00296_new 
+                                             1 
+                               R2022_00686_new 
+                                             1 
+                               R2022_01415_new 
+                                             1 
+                               R2022_04804_new 
+                                             7 
+                               R2022_04905_new 
+                                             6 
+                               R2022_04958_new 
+                                             5 
+                               R2022_04966_new 
+                                             2 
+                               R2022_05004_new 
+                                             1 
+                               R2022_05008_new 
+                                             1 
+                               R2022_05124_new 
+                                             1 
+                               R2022_05153_new 
+                                             1 
+                               R2022_05247_new 
+                                             1 
+                               R2022_06203_new 
+                                             1 
+                               R2022_06581_new 
+                                             1 
+                                     R2022_113 
+                                             1 
+                                     R2022_134 
+                                             1 
+                                     R2022_151 
+                                             6 
+                                     R2022_153 
+                                             1 
+                               R2022_15478_new 
+                                             1 
+                                     R2022_173 
+                                             1 
+                                   R2022_18687 
+                                             5 
+                                   R2022_19217 
+                                             3 
+                                   R2022_21015 
+                                             1 
+                                   R2022_21088 
+                                             1 
+                                   R2022_21351 
+                                             5 
+                                   R2022_21370 
+                                             1 
+                                   R2022_21783 
+                                             1 
+                                     R2022_222 
+                                             1 
+                                   R2022_22508 
+                                             5 
+                                   R2022_22760 
+                                             1 
+                                     R2022_231 
+                                             1 
+                                   R2022_23534 
+                                             1 
+                                   R2022_26136 
+                                             1 
+                                   R2022_26463 
+                                             3 
+                                   R2022_27671 
+                                             4 
+                                   R2022_27673 
+                                             2 
+                                   R2022_28100 
+                                             4 
+                                     R2022_284 
+                                             1 
+                                     R2022_287 
+                                             2 
+                                   R2022_28741 
+                                             1 
+                                   R2022_29106 
+                                             1 
+                               R2022_29646_new 
+                                             4 
+                                       R2022_3 
+                                             1 
+                                   R2022_30760 
+                                             1 
+                               R2022_31110_new 
+                                             5 
+                               R2022_31560_new 
+                                             3 
+                                   R2022_31921 
+                                             5 
+                                   R2022_32592 
+                                             2 
+                               R2022_32594_new 
+                                             1 
+                                   R2022_32679 
+                                             1 
+                                   R2022_33340 
+                                             2 
+                                   R2022_33446 
+                                             3 
+                                   R2022_33822 
+                                             4 
+                                      R2022_37 
+                                             7 
+                                     R2022_390 
+                                             2 
+                               R2022_42360_new 
+                                             1 
+                                   R2022_42774 
+                                             5 
+                                    R2022_4808 
+                                            17 
+                                    R2022_4809 
+                                             1 
+                                    R2022_4820 
+                                             2 
+                                    R2022_4825 
+                                             1 
+                                    R2022_4854 
+                                             4 
+                                    R2022_4860 
+                                             1 
+                                    R2022_4875 
+                                             3 
+                               R2022_48905_new 
+                                             1 
+                                    R2022_4892 
+                                             1 
+                                    R2022_4894 
+                                             1 
+                                    R2022_4901 
+                                             2 
+                                    R2022_4916 
+                                             5 
+                                    R2022_4922 
+                                             1 
+                                    R2022_4939 
+                                             1 
+                                    R2022_4942 
+                                             1 
+                                    R2022_4955 
+                                             1 
+                                    R2022_4983 
+                                            12 
+                                    R2022_4992 
+                                             4 
+                                    R2022_4999 
+                                             1 
+                                    R2022_5010 
+                                             1 
+                                    R2022_5016 
+                                             3 
+                                    R2022_5038 
+                                             1 
+                                    R2022_5059 
+                                             1 
+                                    R2022_5069 
+                                             1 
+                                    R2022_5078 
+                                             1 
+                                    R2022_5081 
+                                             1 
+                                    R2022_5084 
+                                             1 
+                                    R2022_5090 
+                                             1 
+                               R2022_50930_new 
+                                             1 
+                                    R2022_5098 
+                                             5 
+                                    R2022_5113 
+                                             5 
+                                    R2022_5125 
+                                             2 
+                                    R2022_5126 
+                                             1 
+                                    R2022_5138 
+                                             3 
+                                    R2022_5174 
+                                             1 
+                                    R2022_5183 
+                                             7 
+                                    R2022_5185 
+                                             1 
+                                    R2022_5237 
+                                             1 
+                                    R2022_5244 
+                                             1 
+                                    R2022_5260 
+                                             1 
+                                    R2022_5291 
+                                             1 
+                                    R2022_5309 
+                                             1 
+                                    R2022_5368 
+                                             6 
+                                    R2022_5412 
+                                            11 
+                                     R2022_559 
+                                             1 
+                                    R2022_5744 
+                                             1 
+                                    R2022_5908 
+                                             2 
+                                    R2022_6108 
+                                             1 
+                               R2022_61504_new 
+                                             4 
+                               R2022_61888_new 
+                                             1 
+                               R2022_62132_new 
+                                             1 
+                               R2022_62858_new 
+                                             1 
+                               R2022_63047_new 
+                                             1 
+                               R2022_63236_new 
+                                             1 
+                               R2022_64722_new 
+                                             1 
+                                   R2022_76758 
+                                             1 
+                                   R2022_78963 
+                                             3 
+                               R2022_79199_new 
+                                             1 
+                               R2022_79531_new 
+                                             3 
+                                      R2022_82 
+                                             1 
+                                      R2022_95 
+                                             1 
+> table(dat$iso3)
+
+AGO ARM BEN BFA BGD BOL BRA BRB BWA CAF CAN CHN CIV COG CZE ECU EGY ESP ETH FJI 
+  1   2   2   7  11   3  10   1   2   3   1  17   2   4   1   2   5  17   2   2 
+FRA GHA GMB GRC GTM HND HTI IDN IND IRN IRQ ISR ITA JPN KEN KOR LAO LBY MAR MDA 
+  9   4   3   1   7   2   3   1  30  10   1   5  10   1  18  15   2   1   2   2 
+MDG MLI MMR MOZ MUS MWI NGA NIC NOR PAK PER PHL PNG POL PRY RUS THA TJK TUN TUR 
+  3   2   3   9   2   6   2   3   2  10   6   1   1   3   2   8   8   2   1   8 
+TWN TZA UGA UKR URY USA UZB VEN VNM YEM ZAF ZMB ZWE 
+ 19   2   2   2   1   5   2   1  17   1   1   4   3 
+> summary(dat$collection_start)
+Length  Class   Mode 
+     0   NULL   NULL 
+> summary(dat$collection_end)
+Length  Class   Mode 
+     0   NULL   NULL 
+> table(dat$year)
+
+1999 2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 2010 2011 2012 2013 2014 
+   1    5    9    6    7    4    5   23   32   14   23   17   32   46   19    9 
+2015 2016 2017 2018 2019 
+  19   20    5   66    1 
+> summary(dat$age_lower)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  0.000   0.000   0.000   8.909  19.000  49.000 
+> table(dat$age_upper)
+
+  1   2   3   5   6   8   9  11  12  16  17  18  21  23  24  28  35  36  47  48 
+  3   2   2  11   7   1   1  28  14   1   3   5   1  27  46   1   7   9   7   4 
+ 59  60  72 155 
+181   1   1   1 
+> dim(dat)
+[1] 364  48
+> names(dat)
+ [1] "refid"              "strata_id"          "iso3"              
+ [4] "vaccine_cov"        "year"               "age_lower"         
+ [7] "age_upper"          "strata_other"       "bibliography"      
+[10] "cases_tested"       "diag_methodadeno40" "casesadeno40"      
+[13] "diag_methodcampy"   "casescampy"         "diag_methodchol"   
+[16] "caseschol"          "diag_methodnorog2"  "casesnorog2"       
+[19] "diag_methodrota"    "casesrota"          "diag_methodsalm"   
+[22] "casessalm"          "diag_methodshig"    "casesshig"         
+[25] "diag_methodastro"   "casesastro"         "diag_methodcrypto" 
+[28] "casescrypto"        "diag_methodepectyp" "casesepectyp"      
+[31] "diag_methodetecst"  "casesetecst"        "diag_methodsapo"   
+[34] "casessapo"          "income"             "cases2adeno40"     
+[37] "cases2astro"        "cases2campy"        "cases2crypto"      
+[40] "cases2norog2"       "cases2rota"         "cases2salm"        
+[43] "cases2shig"         "cases2etecst"       "cases2chol"        
+[46] "cases2epectyp"      "cases2sapo"         "total"             
+> table(dat$urban)
+< table of extent 0 >
+> summary(dat$sample_size)
+Length  Class   Mode 
+     0   NULL   NULL 
+> summary(dat$cases_tested)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     2.0     66.0    139.5    814.0    291.0 150465.0 
+> summary(dat$vaccine_cov)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   0.00    0.00   20.00   34.13   79.00   90.00     308 
+> 
+> # qualitative
+> table(dat$vaccine_cov)
+
+   0   20   26   29 41.1 57.6 76.4   79 83.8   84   85 88.6   90 
+  25    6    1    1    1    5    1    6    4    2    1    1    2 
+> length(unique(dat$iso3))
+[1] 73
+> summary(dat$year)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+   1999    2007    2012    2011    2016    2019       1 
+> summary(dat$cases_tested)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     2.0     66.0    139.5    814.0    291.0 150465.0 
+> summary(dat$casesadeno40)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  0.000   2.458   4.471   6.504   8.680  29.094     249 
+> summary(dat$casescampy)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  0.000   1.148   2.395   3.641   4.497  39.238     219 
+> summary(dat$cases_tested)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     2.0     66.0    139.5    814.0    291.0 150465.0 
+> 
+> 
+> head(dat[, c("cases_tested", "caseschol")])
+  cases_tested caseschol
+1          174        NA
+2           78        NA
+3          656        NA
+4          396        NA
+5          192        NA
+6         1101        NA
+> 
+> head(dat[which(is.na(dat$cases_tested)), c("cases_tested","caseschol", "casesshig")])
+[1] cases_tested caseschol    casesshig   
+<0 rows> (or 0-length row.names)
+> 
+> summary(dat[, c("caseschol")])
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  0.000   0.000   0.000   2.021   1.140  33.230     263 
+> summary(dat$cases_tested)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     2.0     66.0    139.5    814.0    291.0 150465.0 
+> table( is.na(dat$cases_tested))
+
+FALSE 
+  364 
+> 
+> etiologies<- 	c("epectyp",	#	enteropathogenic Escherichia coli (EPEC) typical
++ "etecst", #		enterotoxigenic Escherichia coli (ETEC) ST (+/- LT)
++ "salm", #		Salmonella spp. (excluding Salmonella typhi)
++ "shig",	#	Shigella spp., 
++ "campy",	#		Campylobacter spp.
++ "chol",	#		Vibrio cholerae O1 and O139
++ "crypto",	#		Cryptosporidium spp.
++ "rota",	  #	  Rotavirus
++ "norog2",	# 		human Caliciviruses: norovirus G2
++ "sapo",	#		human Caliciviruses: sapovirus
++ "astro",	#		astrovirus
++ "adeno40")	#
+> 
+> dat[which(is.na(dat$cases_tested)), paste0("cases", etiologies)]
+ [1] casesepectyp casesetecst  casessalm    casesshig    casescampy  
+ [6] caseschol    casescrypto  casesrota    casesnorog2  casessapo   
+[11] casesastro   casesadeno40
+<0 rows> (or 0-length row.names)
+> 
+> 
+> summary(dat[, paste0("cases", etiologies)])
+  casesepectyp      casesetecst        casessalm         casesshig      
+ Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000  
+ 1st Qu.: 0.1455   1st Qu.: 0.8717   1st Qu.: 0.2945   1st Qu.: 0.9414  
+ Median : 0.5319   Median : 2.9068   Median : 1.0223   Median : 6.1315  
+ Mean   : 1.1700   Mean   : 3.5561   Mean   : 2.5995   Mean   : 9.4623  
+ 3rd Qu.: 1.4735   3rd Qu.: 4.2879   3rd Qu.: 3.0050   3rd Qu.:13.6555  
+ Max.   :17.9825   Max.   :21.1988   Max.   :34.8837   Max.   :79.5469  
+ NA's   :281       NA's   :283       NA's   :190       NA's   :195      
+   casescampy       caseschol       casescrypto        casesrota    
+ Min.   : 0.000   Min.   : 0.000   Min.   : 0.0000   Min.   : 0.00  
+ 1st Qu.: 1.148   1st Qu.: 0.000   1st Qu.: 0.2983   1st Qu.:15.45  
+ Median : 2.395   Median : 0.000   Median : 1.3959   Median :23.81  
+ Mean   : 3.641   Mean   : 2.021   Mean   : 3.3107   Mean   :25.87  
+ 3rd Qu.: 4.497   3rd Qu.: 1.140   3rd Qu.: 4.1626   3rd Qu.:34.68  
+ Max.   :39.238   Max.   :33.230   Max.   :27.7778   Max.   :87.29  
+ NA's   :219      NA's   :263      NA's   :249       NA's   :37     
+  casesnorog2       casessapo         casesastro       casesadeno40   
+ Min.   : 0.000   Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.000  
+ 1st Qu.: 4.780   1st Qu.: 0.9162   1st Qu.: 0.7942   1st Qu.: 2.458  
+ Median : 8.084   Median : 2.4740   Median : 1.7393   Median : 4.471  
+ Mean   :10.051   Mean   : 3.3484   Mean   : 2.7574   Mean   : 6.504  
+ 3rd Qu.:14.379   3rd Qu.: 4.5117   3rd Qu.: 3.2811   3rd Qu.: 8.680  
+ Max.   :48.958   Max.   :39.5816   Max.   :25.8347   Max.   :29.094  
+ NA's   :203      NA's   :235       NA's   :176       NA's   :249     
+> 
+> summary(dat[,paste0("cases", etiologies)])
+  casesepectyp      casesetecst        casessalm         casesshig      
+ Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.0000  
+ 1st Qu.: 0.1455   1st Qu.: 0.8717   1st Qu.: 0.2945   1st Qu.: 0.9414  
+ Median : 0.5319   Median : 2.9068   Median : 1.0223   Median : 6.1315  
+ Mean   : 1.1700   Mean   : 3.5561   Mean   : 2.5995   Mean   : 9.4623  
+ 3rd Qu.: 1.4735   3rd Qu.: 4.2879   3rd Qu.: 3.0050   3rd Qu.:13.6555  
+ Max.   :17.9825   Max.   :21.1988   Max.   :34.8837   Max.   :79.5469  
+ NA's   :281       NA's   :283       NA's   :190       NA's   :195      
+   casescampy       caseschol       casescrypto        casesrota    
+ Min.   : 0.000   Min.   : 0.000   Min.   : 0.0000   Min.   : 0.00  
+ 1st Qu.: 1.148   1st Qu.: 0.000   1st Qu.: 0.2983   1st Qu.:15.45  
+ Median : 2.395   Median : 0.000   Median : 1.3959   Median :23.81  
+ Mean   : 3.641   Mean   : 2.021   Mean   : 3.3107   Mean   :25.87  
+ 3rd Qu.: 4.497   3rd Qu.: 1.140   3rd Qu.: 4.1626   3rd Qu.:34.68  
+ Max.   :39.238   Max.   :33.230   Max.   :27.7778   Max.   :87.29  
+ NA's   :219      NA's   :263      NA's   :249       NA's   :37     
+  casesnorog2       casessapo         casesastro       casesadeno40   
+ Min.   : 0.000   Min.   : 0.0000   Min.   : 0.0000   Min.   : 0.000  
+ 1st Qu.: 4.780   1st Qu.: 0.9162   1st Qu.: 0.7942   1st Qu.: 2.458  
+ Median : 8.084   Median : 2.4740   Median : 1.7393   Median : 4.471  
+ Mean   :10.051   Mean   : 3.3484   Mean   : 2.7574   Mean   : 6.504  
+ 3rd Qu.:14.379   3rd Qu.: 4.5117   3rd Qu.: 3.2811   3rd Qu.: 8.680  
+ Max.   :48.958   Max.   :39.5816   Max.   :25.8347   Max.   :29.094  
+ NA's   :203      NA's   :235       NA's   :176       NA's   :249     
+> 
+> library(dplyr)
+
+Attaching package: ‘dplyr’
+
+The following objects are masked from ‘package:stats’:
+
+    filter, lag
+
+The following objects are masked from ‘package:base’:
+
+    intersect, setdiff, setequal, union
+
+> etiologies
+ [1] "epectyp" "etecst"  "salm"    "shig"    "campy"   "chol"    "crypto" 
+ [8] "rota"    "norog2"  "sapo"    "astro"   "adeno40"
+> # use rota as reference
+> etiologies<- etiologies[c(8,1:7, 9:12)]
+> 
+> #dat$denom<- ifelse(is.na(inp.int$cases_tested), 198, inp.int$cases_tested)
+> names(dat)
+ [1] "refid"              "strata_id"          "iso3"              
+ [4] "vaccine_cov"        "year"               "age_lower"         
+ [7] "age_upper"          "strata_other"       "bibliography"      
+[10] "cases_tested"       "diag_methodadeno40" "casesadeno40"      
+[13] "diag_methodcampy"   "casescampy"         "diag_methodchol"   
+[16] "caseschol"          "diag_methodnorog2"  "casesnorog2"       
+[19] "diag_methodrota"    "casesrota"          "diag_methodsalm"   
+[22] "casessalm"          "diag_methodshig"    "casesshig"         
+[25] "diag_methodastro"   "casesastro"         "diag_methodcrypto" 
+[28] "casescrypto"        "diag_methodepectyp" "casesepectyp"      
+[31] "diag_methodetecst"  "casesetecst"        "diag_methodsapo"   
+[34] "casessapo"          "income"             "cases2adeno40"     
+[37] "cases2astro"        "cases2campy"        "cases2crypto"      
+[40] "cases2norog2"       "cases2rota"         "cases2salm"        
+[43] "cases2shig"         "cases2etecst"       "cases2chol"        
+[46] "cases2epectyp"      "cases2sapo"         "total"             
+> dat[which(is.na(dat$cases_tested)),c("refid", "age_lower","age_upper",
++                                      "cases_tested","iso3")]
+[1] refid        age_lower    age_upper    cases_tested iso3        
+<0 rows> (or 0-length row.names)
+> 
+> 
+> summary(dat$pathogen_num)
+Length  Class   Mode 
+     0   NULL   NULL 
+> 
+> hist(dat$year, breaks=30, xlab="",main="Study year")
+> 
+> hist(dat$cases_tested, main="Number of cases tested", breaks=30, xlab="cases_tested") #, useNA="always")
+> hist(dat$cases_tested[which(dat$cases_tested<1000)], main="Number of cases tested", breaks=30) #, useNA="always")
+> 
+> summary(rowSums(dat[, paste0("cases", etiologies)], na.rm=T))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00   23.00   37.91   42.10   58.68  179.79 
+> dat$casestotal<- rowSums(dat[, paste0("cases", etiologies)], na.rm=T)
+> table(dat$casestotal>=100)
+
+FALSE  TRUE 
+  351    13 
+> 
+> #Scale to be 100% or less
+> for(et in etiologies) {
++   dat[,paste0("cases",et)] <- ifelse(dat$casestotal >100, 
++                                      dat[,paste0("cases",et)]/dat$casestotal * 100, dat[,paste0("cases",et)])
++ }
+> 
+> summary(rowSums(dat[, paste0("cases", etiologies)], na.rm=T))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   0.00   23.00   37.91   41.29   58.68  100.00 
+> 
+> dim(dat)
+[1] 364  49
+> table(dat$pathogen_num)
+< table of extent 0 >
+> head(dat$pathogen_num)
+NULL
+> 
+> summary(dat$casesadeno40)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  0.000   2.458   4.471   6.185   8.518  26.259     249 
+> summary(dat$casesadeno40/ dat$cases_tested)
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.01208 0.03647 0.11372 0.10300 0.90607     249 
+> summary(dat$cases_tested)
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+     2.0     66.0    139.5    814.0    291.0 150465.0 
+> head(dat[,c("refid", "cases_tested", "casesadeno40")])
+            refid cases_tested casesadeno40
+1     pre2022_9la          174           NA
+2 R2022_04958_new           78           NA
+3       R2022_153          656           NA
+4 R2022_04966_new          396           NA
+5       R2022_284          192       4.6875
+6      R2022_4894         1101           NA
+> 
+> 
+> temp<- dat %>% filter(is.na(cases_tested) )
+> temp<- temp[,c("refid", "cases_tested", paste0("cases",etiologies))] 
+> #temp %>% View()
+> out<- NULL
+> dat<- dat[which(!is.na(dat$age_lower)),]
+> 
+> 
+> 
+> 
+> for(et in etiologies){
++  cat(et,"\n") 
++ print(summary(dat[, paste0("cases", et)]/dat$cases_tested))
++ lout<- data.frame(et, mean.cases = mean(dat[, paste0("cases", et)], na.rm=T),
++                   count.study.cases = sum(!is.na(dat[, paste0("cases", et)])) #, 
++                   #cases.tested = mean(dat[, paste0("cases", et)], na.rm=T),
++ #                  mean.conts = mean(dat[, paste0("controls", et)], na.rm=T),
++ #                  count.study.conts = sum(!is.na(dat[, paste0("controls", et)]))
++                   )
++ out<- rbind(out, lout)
++ }
+rota 
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max.     NA's 
+ 0.00000  0.07109  0.16026  0.43395  0.34252 19.77966       37 
+epectyp 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00065 0.00787 0.01431 0.01599 0.11085     281 
+etecst 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00723 0.02136 0.08233 0.06827 1.78142     283 
+salm 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00110 0.00614 0.02746 0.02458 0.40562     190 
+shig 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00252 0.02771 0.19501 0.13690 3.83760     195 
+campy 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00584 0.01597 0.03746 0.03819 0.40312     219 
+chol 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00000 0.00000 0.01821 0.00465 0.49517     263 
+crypto 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00153 0.01428 0.05334 0.04432 0.84808     249 
+norog2 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.03125 0.07267 0.14645 0.15008 1.63266     203 
+sapo 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00492 0.02285 0.04536 0.05032 0.46533     235 
+astro 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.00317 0.01027 0.02603 0.02831 0.30974     176 
+adeno40 
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+0.00000 0.01208 0.03647 0.11372 0.10300 0.90607     249 
+> out
+        et mean.cases count.study.cases
+1     rota  25.601344               327
+2  epectyp   1.036151                83
+3   etecst   3.204548                81
+4     salm   2.579133               174
+5     shig   9.246811               169
+6    campy   3.559529               145
+7     chol   2.002372               101
+8   crypto   3.049716               115
+9   norog2   9.895374               161
+10    sapo   3.232542               129
+11   astro   2.720434               188
+12 adeno40   6.185260               115
+> 
+> dat$count_pathogens<-0
+> for(et in etiologies){
++   dat$count_pathogens<- ifelse(!is.na(dat[,paste0("cases",et)]), 
++                                dat$count_pathogens+1, dat$count_pathogens) 
++ }
+> table(dat$count_pathogens)
+
+  2   3   4   5   6   7   8   9  10  11  12 
+139  69  34  19  14   9   3   5   2   4  66 
+> 
+> save(dat, etiologies, file="../results/Import.RData")
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  0.391   0.041   0.427 

@@ -1,0 +1,241 @@
+
+R version 4.3.1 (2023-06-16) -- "Beagle Scouts"
+Copyright (C) 2023 The R Foundation for Statistical Computing
+Platform: aarch64-apple-darwin20 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+[Previously saved workspace restored]
+
+> 
+> #############################
+> # admin for Amy
+> #setwd("H:/MCEE/analysis")
+> rm(list=ls())
+> Start.time<- Sys.time()
+> options(width=100)
+> 
+> #############################
+> #### Analysis of samples
+> library(sirt)
+- sirt 3.13-228 (2023-08-11 08:28:44.188123)
+> library(R2jags)
+Loading required package: rjags
+Loading required package: coda
+Linked to JAGS 4.3.2
+Loaded modules: basemod,bugs
+
+Attaching package: ‘R2jags’
+
+The following object is masked from ‘package:coda’:
+
+    traceplot
+
+> library(doParallel)
+Loading required package: foreach
+Loading required package: iterators
+Loading required package: parallel
+> library(coda)
+> library(lattice)
+> 
+> 
+> 
+> ## Load data
+> load(file="../results/Make_Input_Data_HI_20231228.RData")
+> table(table(studies[,vxr]))
+
+ 1  2  3  5  7 11 
+31  3  1  2  1  1 
+> summary(as.vector(table(studies[,vxr])))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.000   1.000   1.000   1.744   1.000  11.000 
+> dim(studies)
+[1] 68 26
+> length(unique(studies[,vxr]))
+[1] 39
+> 
+> # covariates
+> vxf<- c( "year",
++         "Iage_lower_lt24m","Iage_upper_24to59m")
+> vdt #<- paste0("cases", etiologies)
+[1] "n_casesrota"    "n_casessalm"    "n_casesshig"    "n_casescampy"   "n_casesnorog2" 
+[6] "n_casesastro"   "n_casesadeno40" "n_casesother"  
+> vdt
+[1] "n_casesrota"    "n_casessalm"    "n_casesshig"    "n_casescampy"   "n_casesnorog2" 
+[6] "n_casesastro"   "n_casesadeno40" "n_casesother"  
+> 
+> 
+> source("functions_etiologies.R")
+> 
+> table(table(studies$ran_id))
+
+ 1  2  3  5  7 11 
+31  3  1  2  1  1 
+> lam<- 150
+> sd<- 0.04
+> 
+>   Start<- Sys.time()
+>   print(Start)
+[1] "2024-01-09 16:30:31 EST"
+>   cat("\n\n LAMBDA ",lam," , sd = ", sd, "  \n\n")
+
+
+ LAMBDA  150  , sd =  0.04   
+
+> 
+> 
+>   out<- f.e1(PARA=1,        #1 - use parallel computing, 0 - use serial computing
++              STUD=studies,  #Input study data
++              DEAT=cases,   #Deaths from input studies (in misclassification matrix)
++              VDT=vdt,       #Causes
++              VXF=vxf,       #Covariates
++              VXR=vxr,       #Random Effect identifier
++              MODL="LASSO_etiologies.txt", #Text file with JAGS model defintion
++              LAMB=lam,      #Lambda value for Lasso
++              RSDL=sd,       #For prior of standard deviation of random effects, maximum of SD
++              QUAD=0,        #NULL if no quadratic terms desired
++              CHAS=4,        #Number of MCMC chains
++              ITER=15000,      #Number of MCMC iterations
++              BURN=10000,        #Number of iterations for burn-in of MCMC
++              THIN=1,        #Thining factor for MCMC
++              SEED=718,      #random seed for jags.parallel (for jags use set.seed() first)
++              PRIN=TRUE,     #Print computation stage
++              SAMC=TRUE,     #T/F save MCMC samples?
++              SAVX=TRUE,     #Save explanatory variables
++              SADE=TRUE,     #Save death matrix
++              NAME=NULL      #Optional model names
++              )
+[1] "time =  26.344"
+> 
+> 
+> 
+> 
+>   print(Sys.time() - Start)
+Time difference of 26.39587 secs
+> 
+>   #convergence statistics
+>   class(out$output$BUGSoutput)
+[1] "bugs"
+>   #summ <-  sirt::mcmc.list.descriptives( as.mcmc(out$output$BUGSoutput) )
+>   #warnings()
+>   summ<-as.data.frame(out$output$BUGSoutput$summary)
+>   names(summ)
+[1] "mean"  "sd"    "2.5%"  "25%"   "50%"   "75%"   "97.5%" "Rhat"  "n.eff"
+>   print(summary(summ$Rhat))
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  1.001   1.001   1.001   1.004   1.002   1.051 
+>   #hist(summ$Rhat, main=paste("Lambda resampled, sd max = ",sd))
+>   head(summ[order(-summ$Rhat),], n=30)
+                  mean           sd          2.5%           25%           50%           75%
+B[3,8]   -2.625013e-02  0.044473714 -1.921998e-01 -3.046532e-02 -1.200418e-02 -2.672265e-03
+B[3,5]   -2.562771e-01  0.060527639 -3.411892e-01 -2.925528e-01 -2.656733e-01 -2.347556e-01
+B[1,5]   -1.861889e-01  0.036308192 -2.646910e-01 -2.083762e-01 -1.846408e-01 -1.618517e-01
+B[1,8]   -2.754879e-02  0.023652913 -8.318384e-02 -4.191885e-02 -2.282750e-02 -8.855224e-03
+B[4,2]   -1.376722e-02  0.017695044 -5.985858e-02 -2.152810e-02 -8.967768e-03 -1.592632e-03
+B[2,8]   -4.286180e-03  0.009896493 -2.800108e-02 -8.969027e-03 -2.617587e-03  1.439668e-03
+B[4,3]   -6.724029e-03  0.012159015 -3.799197e-02 -1.180629e-02 -4.052008e-03  6.388985e-04
+B[4,4]   -1.670758e-02  0.019524476 -6.670487e-02 -2.575552e-02 -1.145898e-02 -2.687958e-03
+B[3,6]   -2.392934e-03  0.009367925 -2.421562e-02 -6.796304e-03 -1.378212e-03  2.635594e-03
+B[3,2]   -5.451431e-03  0.011232014 -3.296127e-02 -1.048359e-02 -3.268316e-03  1.113105e-03
+B[1,6]   -2.024554e+00  0.042777770 -2.109051e+00 -2.053704e+00 -2.023886e+00 -1.995370e+00
+B[4,8]   -2.512715e-01  0.030789640 -3.105856e-01 -2.726057e-01 -2.513551e-01 -2.306321e-01
+B[3,3]   -7.244187e-03  0.013017402 -4.053763e-02 -1.245672e-02 -4.215221e-03  6.023500e-04
+B[2,6]   -9.740781e-03  0.013446489 -4.391684e-02 -1.593674e-02 -6.447649e-03 -5.980729e-04
+B[3,7]   -7.191447e-03  0.011959686 -3.750718e-02 -1.247152e-02 -4.589388e-03  3.687980e-04
+B[2,7]    2.604928e-03  0.009846582 -1.565911e-02 -2.578487e-03  1.381712e-03  6.982823e-03
+B[4,5]   -2.465072e-03  0.009354906 -2.416881e-02 -6.808213e-03 -1.333848e-03  2.603167e-03
+B[4,6]   -4.959808e-04  0.009149446 -2.063684e-02 -5.040118e-03 -2.206092e-04  4.087119e-03
+B[3,4]   -1.061841e-02  0.014599875 -4.854980e-02 -1.729134e-02 -6.963587e-03 -7.948646e-04
+B[1,7]   -1.311196e+00  0.054192692 -1.419358e+00 -1.347658e+00 -1.310161e+00 -1.274223e+00
+B[4,7]   -3.458208e-03  0.009769337 -2.668051e-02 -8.043353e-03 -2.011244e-03  2.143663e-03
+B[2,4]    2.365843e-02  0.023495139 -4.856399e-03  5.814280e-03  1.791490e-02  3.540812e-02
+B[2,3]    4.473858e-03  0.010877545 -1.351945e-02 -1.661060e-03  2.488846e-03  9.189950e-03
+B[1,3]   -2.196766e+00  0.065244458 -2.326724e+00 -2.240351e+00 -2.195420e+00 -2.152339e+00
+B[2,5]   -8.146986e-02  0.030014341 -1.400495e-01 -1.018747e-01 -8.160386e-02 -6.105250e-02
+B[2,2]    3.404400e-03  0.009778519 -1.358915e-02 -2.124541e-03  1.924621e-03  8.021801e-03
+deviance  5.270277e+03 44.049372669  5.186529e+03  5.240121e+03  5.269386e+03  5.299607e+03
+B[1,2]   -1.735955e+00  0.042228513 -1.819424e+00 -1.764152e+00 -1.735600e+00 -1.707430e+00
+B[1,4]   -1.606800e+00  0.042205603 -1.689053e+00 -1.635411e+00 -1.606659e+00 -1.578362e+00
+                 97.5%     Rhat n.eff
+B[3,8]    7.016039e-03 1.050746   180
+B[3,5]   -4.970411e-02 1.030551   210
+B[1,5]   -1.195471e-01 1.006103   570
+B[1,8]    3.809318e-03 1.002124  2000
+B[4,2]    8.348893e-03 1.001831  4100
+B[2,8]    1.236656e-02 1.001759  2900
+B[4,3]    1.133190e-02 1.001580  8600
+B[4,4]    6.852240e-03 1.001551  3800
+B[3,6]    1.497883e-02 1.001424  4800
+B[3,2]    1.258061e-02 1.001271  8200
+B[1,6]   -1.941927e+00 1.001263  6900
+B[4,8]   -1.899180e-01 1.001201  8300
+B[3,3]    1.147129e-02 1.001166  9300
+B[2,6]    8.719487e-03 1.001090 13000
+B[3,7]    1.057510e-02 1.001061 15000
+B[2,7]    2.533899e-02 1.001056 16000
+B[4,5]    1.464580e-02 1.001056 16000
+B[4,6]    1.884014e-02 1.001046 17000
+B[3,4]    8.949472e-03 1.001030 19000
+B[1,7]   -1.207321e+00 1.001009 20000
+B[4,7]    1.371884e-02 1.001001 20000
+B[2,4]    8.272510e-02 1.000999 20000
+B[2,3]    3.091100e-02 1.000984 20000
+B[1,3]   -2.071876e+00 1.000966 20000
+B[2,5]   -2.251149e-02 1.000955 20000
+B[2,2]    2.667825e-02 1.000952 20000
+deviance  5.358415e+03 1.000945 20000
+B[1,2]   -1.653630e+00 1.000940 20000
+B[1,4]   -1.524252e+00 1.000932 20000
+>   table(summ$Rhat>1.1)
+
+FALSE 
+   29 
+> #  head(summ, n=50)
+>   vxf
+[1] "year"               "Iage_lower_lt24m"   "Iage_upper_24to59m"
+>   eb0   <- out$output$BUGSoutput$median$B # fixed effects
+>   cat("\n\n BETA estimate\n\n")
+
+
+ BETA estimate
+
+>   print(eb0)
+             [,1]         [,2]         [,3]         [,4]          [,5]         [,6]         [,7]
+[1,] -1.735599971 -2.195420304 -1.606658608 -0.184640799 -2.0238861012 -1.310161336 -0.022827500
+[2,]  0.001924621  0.002488846  0.017914901 -0.081603858 -0.0064476489  0.001381712 -0.002617587
+[3,] -0.003268316 -0.004215221 -0.006963587 -0.265673286 -0.0013782116 -0.004589388 -0.012004182
+[4,] -0.008967768 -0.004052008 -0.011458985 -0.001333848 -0.0002206092 -0.002011244 -0.251355090
+> 
+>   save(out,
++        #summ, jm.r0,
++        #lambda, sd,
++        #studies, data.predict, deaths,
++        #vxf, #predictors
++        #vdt, #causes
++        file=paste0("../results/Estimate_etiologies_HI_l", lam,".RData"))
+> 
+> 
+> vdt
+[1] "n_casesrota"    "n_casessalm"    "n_casesshig"    "n_casescampy"   "n_casesnorog2" 
+[6] "n_casesastro"   "n_casesadeno40" "n_casesother"  
+> 
+> 
+> 
+> Sys.time() - Start.time
+Time difference of 27.0718 secs
+> 
+> proc.time()
+   user  system elapsed 
+  1.126   0.061  27.414 

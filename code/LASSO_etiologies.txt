@@ -1,0 +1,27 @@
+
+  model{
+    for (s in 1:S){   # loop through studies
+    
+      ## Define model for each TRUE cause of death
+      # C number of TRUE causes of death
+      # q is log(odds) for each cause: log(Pi/P1) where i = 1...C 
+      q[s,1] <- 1
+      for(d in 2:C){
+        log(q[s,d]) <- inprod(XM[s,1:K],B[1:K,d]) 
+      }
+      pi[s,1:C] <- q[s,1:C] / sum(q[s,1:C]) 
+      
+      P[fi[s]:la[s]] <- GM[fi[s]:la[s], 1:C] %*% pi[s,]
+      
+      ## Multinomial model of observed numbers in reported categories from expected proportions
+      GM[fi[s]:la[s], C+1] ~ dmultinom(P[fi[s]:la[s]], N[s])
+    }
+    
+    # Define priors
+    for(c in 2:C){
+     for(x in 1:K){
+      # B[x,c] ~ dnorm(0,1/0.5^2)
+        B[x,c] ~ ddexp(0,lambda) 
+      }
+    }
+  }
