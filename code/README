@@ -1,6 +1,6 @@
 
 
-1. Import.R - read Diana's data
+1. Import.R - read systematic review data
 
 for low income model:
    2a. Make_input_data.R 
@@ -23,19 +23,9 @@ for estimates for all 194 countries in 2000/2021:
   6. Summarize_uncertainty.R
   
   
-  
-  For statistics:
-  
-  Main manuscript-
-  table 1 - global and by income, 2000 and 2021, number of deaths
-  table 2 - global and by income, 2000 and 2021, percent of diarrhea deaths
-  table 3 - LMIC, by region, 2000 and 2021, number of deaths
-  
-  
-  Web Appendix Table 1. Description of study (input) data by country income level
-  ??? Web Appendix Table 3. Description of diagnostic methods in study (input) data
-  Web Appendix Figure 2. Comparison of before and after scalars
-  Web Appendix Figure 3. Model coefficient estimates
-  Web Appendix Figure 4. Convergence for high income model.
-  Web Appendix Figure 5. Convergence for low and middle-income model.
-  Web Appendix Table 4. Comparison of Previous4,9,17 and current estimates of the etiologies of diarrhea deaths
+For detailed description of methods please refer to:
+
+Black RE, Perin J, Yeung D, Rajeev T, Miller J, Elwood SE, Platts-Mills JA. 
+Estimated global and regional causes of deaths from diarrhoea in children 
+younger than 5 years during 2000–21: a systematic review and Bayesian 
+multinomial analysis. The Lancet Global Health. 2024 Apr 20.
