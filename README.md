@@ -1,8 +1,9 @@
-# diarrhea_etiology
+# diarrhoea_etiology
 
 
 This repository contains all source data as well as source coding used to create estimates of
-etiology-specific diarrhea deaths for the years 2000 to 2021. 
+etiology-specific diarrhea deaths for the years 2000 to 2021. Methods, results, and interpretation 
+are provided in detail in the publications:
 
 
 Black RE, Perin J, Yeung D, Rajeev T, Miller J, Elwood SE, Platts-Mills JA. 
